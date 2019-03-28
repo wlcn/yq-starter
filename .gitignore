@@ -30,3 +30,5 @@ log/*
 debug
 
 *.db
+
+*.exe

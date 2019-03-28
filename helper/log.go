@@ -130,6 +130,7 @@ func LogRequest(uri string, method string, ip string, contentType string, agent 
 // LogMiddleware provide gin router handler.
 func LogMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Content-Type is empty???
 		LogRequest(c.Request.URL.Path, c.Request.Method, c.ClientIP(), c.ContentType(), c.GetHeader("User-Agent"))
 		c.Next()
 	}
