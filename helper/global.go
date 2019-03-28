@@ -20,3 +20,14 @@ var (
 	// DB is to access database
 	DB *gorm.DB
 )
+
+const (
+	// Code is key in response
+	Code = "code"
+	// Msg is key in response
+	Msg = "msg"
+	// Data is key in response
+	Data = "data"
+	// Token is key in response
+	Token = "token"
+)

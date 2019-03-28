@@ -52,11 +52,11 @@ func ParseToken(token string) (*Claims, error) {
 func JWTMiddleware() gin.HandlerFunc {
 	// Set out header value for each response
 	return func(c *gin.Context) {
-		token := c.Query("token")
+		token := c.Query(Token)
 		claims, err := ParseToken(token)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"msg": "未授权用户",
+				Msg: "未授权用户",
 			})
 			c.Abort()
 			return

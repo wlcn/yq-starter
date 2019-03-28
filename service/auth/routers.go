@@ -31,7 +31,7 @@ func Login(c *gin.Context) {
 	}
 	token, err := helper.GenerateToken(user.Name, user.Password)
 	c.JSON(http.StatusOK, gin.H{
-		"token": token,
+		helper.Token: token,
 	})
 }
 
