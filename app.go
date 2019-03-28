@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/wlcn/yq-starter/config"
 	"github.com/wlcn/yq-starter/helper"
+	"github.com/wlcn/yq-starter/service/auth"
 	"github.com/wlcn/yq-starter/service/user"
 )
 
@@ -26,6 +27,7 @@ func routerEngine() *gin.Engine {
 	r.Use(helper.LogMiddleware())
 	r.Use(helper.VersionMiddleware())
 
+	auth.Routers(r.Group("/auth"))
 	// group: v1
 	v1 := r.Group("/api/v1")
 	user.Routers(v1.Group("/user"))
