@@ -30,6 +30,7 @@ func routerEngine() *gin.Engine {
 	auth.Routers(r.Group("/auth"))
 	// group: v1
 	v1 := r.Group("/api/v1")
+	v1.Use(helper.JWTMiddleware())
 	user.Routers(v1.Group("/user"))
 	return r
 }

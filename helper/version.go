@@ -32,7 +32,7 @@ func PrintVersion() {
 func VersionMiddleware() gin.HandlerFunc {
 	// Set out header value for each response
 	return func(c *gin.Context) {
-		c.Header("X-YQ-VERSION", version)
+		c.Header("X-App-Version", version)
 		c.Next()
 	}
 }

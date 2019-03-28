@@ -29,7 +29,10 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"user": user})
+	token, err := helper.GenerateToken(user.Name, user.Password)
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+	})
 }
 
 // Logout logic
