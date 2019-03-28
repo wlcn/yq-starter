@@ -1,32 +1,43 @@
 package helper
 
 import (
+	"fmt"
 	"log"
-	"os"
+	"os/user"
 
 	"github.com/jinzhu/gorm"
+
 	// just call it`s init method
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-func init() {
-	Once.Do(Init)
-}
-
-// Init 初始化数据库链接
-func Init() {
-	tmpDir := "/tmp/yq-starter/"
-	os.MkdirAll(tmpDir, os.ModePerm)
-	// os.RemoveAll(tmpDir + "app_test.db")
-	db, err := gorm.Open("sqlite3", tmpDir+"app_test.db")
-	if err != nil {
-		log.Fatal("Failed to connect database")
+// InitAppDatabase 初始化数据库链接
+func InitAppDatabase() error {
+	var err error
+	LogAccess.Infof("Init App Database Engine as %v", AppConfig.Database.Engine)
+	switch AppConfig.Database.Engine {
+	case "mysql":
+		DB, err = gorm.Open("mysql", AppConfig.Database.Mysql.URL)
+	case "sqlite3":
+		DB, err = gorm.Open("sqlite3", AppConfig.Database.Sqlite3.URL)
+	default:
+		LogError.Error("Database error: can't find database driver")
+		err = fmt.Errorf("can't find Database driver")
 	}
-	db.LogMode(true)
-	DB = db
+	if err != nil {
+		LogError.Errorf("Database error %+v", err)
+		log.Fatalf("db err %+v", err)
+	}
+	DB.DB().SetMaxIdleConns(10)
+	DB.LogMode(true)
+
+	Migrate()
+	return err
+
 }
 
-// Close 关闭数据库
-func Close() {
-	DB.Close()
+// Migrate schame
+func Migrate() {
+	DB.AutoMigrate(&user.User{})
 }

@@ -15,11 +15,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// 初始化表结构
-func init() {
-	helper.DB.AutoMigrate(&User{})
-}
-
 // User should only be concerned with database schema, more strict checking should be put in validator.
 type User struct {
 	gorm.Model
