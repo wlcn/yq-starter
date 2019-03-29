@@ -17,16 +17,16 @@ type Claims struct {
 
 // GenerateToken 生成token
 func GenerateToken(name, password string) (string, error) {
-	var jwtSecret = []byte("yq-starter")
+	var jwtSecret = []byte(AppConfig.Auth.JWTSecret)
 	nowTime := time.Now()
-	expireTime := nowTime.Add(6 * time.Hour)
+	expireTime := nowTime.Add(time.Duration(AppConfig.Auth.JWTExpiresAt) * time.Hour)
 
 	claims := Claims{
 		name,
 		password,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer:    "yq-starter-issuer",
+			Issuer:    AppConfig.Auth.JWTIssuer,
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -36,7 +36,7 @@ func GenerateToken(name, password string) (string, error) {
 
 // ParseToken 解析token
 func ParseToken(token string) (*Claims, error) {
-	var jwtSecret = []byte("yq-starter")
+	var jwtSecret = []byte(AppConfig.Auth.JWTSecret)
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})

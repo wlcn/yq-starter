@@ -17,3 +17,7 @@ database:
     url: "user:password@/dbname?charset=utf8&parseTime=True&loc=Local"
   sqlite3: 
     url: "/tmp/yq-starter/app_test.db"
+auth:
+  jwt_secret: "yq-starter-secret" # support mysql, sqlite3
+  jwt_issuer: "yq-starter-issuer"
+  jwt_expires_at: 6 # 单位为小时 6h过期

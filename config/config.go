@@ -11,13 +11,13 @@ import (
 
 var defaultConf = []byte(`
 core:
-  mode: "debug"
+  mode: "debug" #gin mode support debug, test, release
   version: "yq-starter-1.0"
   address: "" # ip address to bind (default: any)
   port: "8080" # ignore this port number if auto_tls is enabled (listen 443).  
 log:
   gin_log: "/tmp/yq-starter/logs/gin.log" # define log path like "logs/gin.log"
-  format: "string" # string or json
+  format: "json" # string or json
   access_log: "/tmp/yq-starter/logs/access.log" # stdout: output to console, or define log path like "logs/access.log"
   access_level: "debug"
   error_log: "/tmp/yq-starter/logs/error.log" # stderr: output to console, or define log path like "logs/error.log"
@@ -29,6 +29,10 @@ database:
     url: "user:password@/dbname?charset=utf8&parseTime=True&loc=Local"
   sqlite3: 
     url: "/tmp/yq-starter/app_test.db"
+auth:
+  jwt_secret: "yq-starter-secret" # support mysql, sqlite3
+  jwt_issuer: "yq-starter-issuer"
+  expires_at: 6 # 单位为小时 6h过期
 `)
 
 // ConfYaml is config structure.
@@ -36,6 +40,7 @@ type ConfYaml struct {
 	Core     SectionCore     `yaml:"core"`
 	Log      SectionLog      `yaml:"log"`
 	Database SectionDatabase `yaml:"database"`
+	Auth     SectionAuth     `yaml:"auth"`
 }
 
 // SectionCore is sub section of config.
@@ -73,6 +78,13 @@ type SectionMysql struct {
 // SectionSqlite3 is sub section of config.
 type SectionSqlite3 struct {
 	URL string `yaml:"url"`
+}
+
+// SectionAuth is sub section of config.
+type SectionAuth struct {
+	JWTSecret    string `yaml:"jwt_secret"`
+	JWTIssuer    string `yaml:"jwt_issuer"`
+	JWTExpiresAt int    `yaml:"jwt_expires_at"`
 }
 
 // LoadConf load config from file and read in environment variables that match
@@ -128,5 +140,10 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	conf.Database.LogMode = viper.GetBool("database.log_mode")
 	conf.Database.Mysql.URL = viper.GetString("database.mysql.url")
 	conf.Database.Sqlite3.URL = viper.GetString("database.sqlite3.url")
+
+	// Auth
+	conf.Auth.JWTSecret = viper.GetString("auth.jwt_secret")
+	conf.Auth.JWTIssuer = viper.GetString("auth.jwt_issuer")
+	conf.Auth.JWTExpiresAt = viper.GetInt("auth.jwt_expires_at")
 	return conf, nil
 }
