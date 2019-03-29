@@ -89,6 +89,7 @@ func main() {
 
 	defer helper.DB.Close()
 
+	Migrate()
 	// Logging to a file.
 	f, _ := os.Create(helper.AppConfig.Log.GinLog)
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
@@ -137,4 +138,9 @@ func initDir() (err error) {
 		}
 	}
 	return
+}
+
+// Migrate schame
+func Migrate() {
+	helper.DB.AutoMigrate(&user.User{})
 }

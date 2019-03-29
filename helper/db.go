@@ -3,7 +3,6 @@ package helper
 import (
 	"fmt"
 	"log"
-	"os/user"
 
 	"github.com/jinzhu/gorm"
 
@@ -30,14 +29,6 @@ func InitAppDatabase() error {
 		log.Fatalf("db err %+v", err)
 	}
 	DB.DB().SetMaxIdleConns(10)
-	DB.LogMode(true)
-
-	Migrate()
+	DB.LogMode(AppConfig.Database.LogMode)
 	return err
-
-}
-
-// Migrate schame
-func Migrate() {
-	DB.AutoMigrate(&user.User{})
 }

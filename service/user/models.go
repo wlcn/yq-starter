@@ -1,7 +1,6 @@
 package user
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"time"
@@ -18,32 +17,33 @@ import (
 // User should only be concerned with database schema, more strict checking should be put in validator.
 type User struct {
 	gorm.Model
-	Name         string
-	Age          sql.NullInt64
-	Birthday     *time.Time
-	Email        string  `gorm:"type:varchar(100);unique_index"`
-	Role         string  `gorm:"size:255"`        // set field size to 255
-	MemberNumber *string `gorm:"unique;not null"` // set member number to unique and not null
-	Address      string  `gorm:"index:addr"`      // create index with name `addr` for address
-	PasswordHash string  `gorm:"column:password;not null"`
-	Password     string  `gorm:"-"` // ignore this field
+	Name         string `gorm:"type:varchar(100);unique_index"`
+	Age          int
+	Birthday     time.Time
+	Email        string `gorm:"type:varchar(100);unique_index"`
+	Role         string `gorm:"size:255"`        // set field size to 255
+	MemberNumber string `gorm:"unique;not null"` // set member number to unique and not null
+	Address      string `gorm:"index:addr"`      // create index with name `addr` for address
+	Password     string `gorm:"column:password;not null"`
 }
 
-func (u *User) setPassword(password string) error {
+// SetPassword 设置密码加密
+func (u *User) SetPassword(password string) error {
 	if len(password) == 0 {
 		return fmt.Errorf("Password should not be empty, actually is [%s]", password)
 	}
 	bytePassword := []byte(password)
 	// Make sure the second param `bcrypt generator cost` between [4, 32)
 	passwordHash, _ := bcrypt.GenerateFromPassword(bytePassword, bcrypt.DefaultCost)
-	u.PasswordHash = string(passwordHash)
+	u.Password = string(passwordHash)
 	return nil
 }
 
-func (u *User) checkPassword(password string) error {
+// CheckPassword 验证密码
+func (u *User) CheckPassword(password string) error {
 	bytePassword := []byte(password)
-	byteHashedPassword := []byte(u.PasswordHash)
-	log.Printf("password is %v, passwordHash is %v", password, u.PasswordHash)
+	byteHashedPassword := []byte(u.Password)
+	log.Printf("password is %v, passwordHash is %v", password, u.Password)
 	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
 }
 

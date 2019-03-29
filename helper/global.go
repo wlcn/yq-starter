@@ -30,4 +30,8 @@ const (
 	Data = "data"
 	// Token is key in response
 	Token = "token"
+	// Error is key in response
+	Error = "error"
+	// Order is default to sort
+	Order = " id DESC "
 )
