@@ -41,5 +41,6 @@ nohup ./app &
 
 - redis
 - kafka
+- elasticsearch
 - rpc
-- mirc service
+- micro service

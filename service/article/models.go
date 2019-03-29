@@ -14,11 +14,13 @@ import (
 type Article struct {
 	gorm.Model
 	Title       string `gorm:"type:varchar(512)"`
+	Content     string `gorm:"type:text"`
+	Author      string
+	Excerpt     string
 	ReadCount   int
 	LikeCount   int
 	PublishTime time.Time
 	UserID      string `gorm:"type:varchar(100)"`
-	Content     string `gorm:"type:text"` // set field size to 255
 }
 
 // FindOne 查询
