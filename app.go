@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/wlcn/yq-starter/config"
 	"github.com/wlcn/yq-starter/helper"
+	"github.com/wlcn/yq-starter/service/article"
 	"github.com/wlcn/yq-starter/service/auth"
 	"github.com/wlcn/yq-starter/service/user"
 )
@@ -32,6 +33,7 @@ func routerEngine() *gin.Engine {
 	v1 := r.Group("/api/v1")
 	v1.Use(helper.JWTMiddleware())
 	user.Routers(v1.Group("/user"))
+	article.Routers(v1.Group("/article"))
 	return r
 }
 
@@ -143,4 +145,5 @@ func initDir() (err error) {
 // Migrate schame
 func Migrate() {
 	helper.DB.AutoMigrate(&user.User{})
+	helper.DB.AutoMigrate(&article.Article{})
 }
