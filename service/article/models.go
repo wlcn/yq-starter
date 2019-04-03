@@ -13,14 +13,17 @@ import (
 // Article should only be concerned with database schema, more strict checking should be put in validator.
 type Article struct {
 	gorm.Model
-	Title       string `gorm:"type:varchar(512)"`
-	Content     string `gorm:"type:text"`
-	Author      string
-	Excerpt     string
-	ReadCount   int
-	LikeCount   int
-	PublishTime time.Time
-	UserID      string `gorm:"type:varchar(100)"`
+	SourceID    string    `json:"source_id"`
+	URL         string    `json:"url"`
+	Title       string    `gorm:"type:varchar(512)" json:"title"`
+	Content     string    `gorm:"type:text" json:"content"`
+	PublishTime time.Time `json:"publish_time"`
+	Author      string    `json:"author"`
+	Source      string    `json:"source"`
+	Tag         string    `json:"tag"`
+	Lrclink     string    `json:"lrclink"`
+	PicLink     string    `json:"pic_link"`
+	FileLink    string    `json:"file_link"`
 }
 
 // FindOne 查询
