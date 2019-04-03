@@ -14,6 +14,7 @@ import (
 	"github.com/wlcn/yq-starter/helper"
 	"github.com/wlcn/yq-starter/service/article"
 	"github.com/wlcn/yq-starter/service/auth"
+	"github.com/wlcn/yq-starter/service/image"
 	"github.com/wlcn/yq-starter/service/user"
 )
 
@@ -34,6 +35,7 @@ func routerEngine() *gin.Engine {
 	v1.Use(helper.JWTMiddleware())
 	user.Routers(v1.Group("/user"))
 	article.Routers(v1.Group("/article"))
+	image.Routers(v1.Group("/image"))
 	return r
 }
 
@@ -146,4 +148,5 @@ func initDir() (err error) {
 func Migrate() {
 	helper.DB.AutoMigrate(&user.User{})
 	helper.DB.AutoMigrate(&article.Article{})
+	helper.DB.AutoMigrate(&image.Image{})
 }
