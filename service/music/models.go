@@ -1,6 +1,8 @@
-package image
+package music
 
 import (
+	"time"
+
 	"github.com/wlcn/yq-starter/service/common"
 
 	"github.com/wlcn/yq-starter/helper"
@@ -8,21 +10,25 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Image should only be concerned with database schema, more strict checking should be put in validator.
-type Image struct {
+// Music should only be concerned with database schema, more strict checking should be put in validator.
+type Music struct {
 	gorm.Model
-	SourceID string
-	URL      string
-	Title    string `gorm:"type:varchar(512)"`
-	Content  string `gorm:"type:text"`
-	Author   string
-	Source   string
-	Tag      string
+	SourceID    string
+	URL         string
+	Title       string `gorm:"type:varchar(512)"`
+	Content     string `gorm:"type:text"`
+	PublishTime time.Time
+	Author      string
+	Source      string
+	Tag         string
+	LrcLink     string
+	PicLink     string
+	FileLink    string
 }
 
 // FindOne 查询
-func FindOne(condition interface{}) (Image, error) {
-	var model Image
+func FindOne(condition interface{}) (Music, error) {
+	var model Music
 	err := helper.DB.Where(condition).First(&model).Error
 	return model, err
 }
@@ -30,7 +36,7 @@ func FindOne(condition interface{}) (Image, error) {
 // FindCondition 分页条件查询
 func FindCondition(condition interface{}, page common.Page) (interface{}, error) {
 	var result = make(map[string]interface{}, 0)
-	var models []Image
+	var models []Music
 	var count int
 	err := helper.DB.Where(condition).Limit(page.Size).Offset((page.Page - 1) * page.Size).Order(page.Order).Find(&models).Count(&count).Error
 	if err != nil {
@@ -38,7 +44,7 @@ func FindCondition(condition interface{}, page common.Page) (interface{}, error)
 	}
 	// log.Printf("models is %+v, count is %v", models, count)
 	result["total"] = count
-	result["images"] = models
+	result["musics"] = models
 	return result, err
 }
 
@@ -57,8 +63,8 @@ func UpdateOne(data interface{}) error {
 // PatchOne 局部更新对象，只有传值并且传的是真值才会更新
 // WARNING when update with struct, GORM will only update those fields that with non blank value
 func PatchOne(data interface{}) error {
-	var image Image
-	err := helper.DB.Model(&image).Updates(data).Error
+	var music Music
+	err := helper.DB.Model(&music).Updates(data).Error
 	return err
 }
 

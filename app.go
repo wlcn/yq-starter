@@ -15,6 +15,7 @@ import (
 	"github.com/wlcn/yq-starter/service/article"
 	"github.com/wlcn/yq-starter/service/auth"
 	"github.com/wlcn/yq-starter/service/image"
+	"github.com/wlcn/yq-starter/service/music"
 	"github.com/wlcn/yq-starter/service/user"
 )
 
@@ -36,6 +37,7 @@ func routerEngine() *gin.Engine {
 	user.Routers(v1.Group("/user"))
 	article.Routers(v1.Group("/article"))
 	image.Routers(v1.Group("/image"))
+	music.Routers(v1.Group("/music"))
 	return r
 }
 
@@ -149,4 +151,5 @@ func Migrate() {
 	helper.DB.AutoMigrate(&user.User{})
 	helper.DB.AutoMigrate(&article.Article{})
 	helper.DB.AutoMigrate(&image.Image{})
+	helper.DB.AutoMigrate(&music.Music{})
 }
