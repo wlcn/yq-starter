@@ -24,6 +24,7 @@ type Music struct {
 	LrcLink     string
 	PicLink     string
 	FileLink    string
+	FilePath    string
 }
 
 // FindOne 查询
