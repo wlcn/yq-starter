@@ -53,6 +53,9 @@ func JWTMiddleware() gin.HandlerFunc {
 	// Set out header value for each response
 	return func(c *gin.Context) {
 		token := c.GetHeader(Token)
+		if token == "" {
+			token = c.Query(Token)
+		}
 		if token == "I am a valid token in YQ" {
 			c.Header("X-App-User", "TEST_USER")
 			c.Next()
