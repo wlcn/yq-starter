@@ -41,6 +41,7 @@ func Find(c *gin.Context) {
 		})
 		return
 	}
+	article.DeletedAt = nil
 	// log.Printf("page is %+v, article is %+v", page, article)
 	result, err := FindCondition(&article, page)
 	if err != nil {

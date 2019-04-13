@@ -1,7 +1,6 @@
 package music
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -38,7 +37,6 @@ func Find(c *gin.Context) {
 		page.Order = helper.Order
 	}
 	var music Music
-	fmt.Printf("music is %+v", music)
 	if err := c.ShouldBindQuery(&music); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			helper.Code:  http.StatusBadRequest,
@@ -46,7 +44,7 @@ func Find(c *gin.Context) {
 		})
 		return
 	}
-	fmt.Printf(" bind after music is %+v", music)
+	music.DeletedAt = nil
 	// log.Printf("page is %+v, music is %+v", page, music)
 	result, err := FindCondition(&music, page)
 	if err != nil {
