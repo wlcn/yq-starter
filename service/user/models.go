@@ -18,7 +18,7 @@ import (
 type User struct {
 	gorm.Model
 	Name         string `gorm:"type:varchar(100);unique_index"`
-	Age          int
+	Age          *int
 	Birthday     time.Time
 	Email        string `gorm:"type:varchar(100);unique_index"`
 	Role         string `gorm:"size:255"`        // set field size to 255

@@ -1,6 +1,9 @@
 package music
 
 import (
+	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/wlcn/yq-starter/helper"
@@ -17,6 +20,7 @@ func Routers(r *gin.RouterGroup) {
 	r.PUT("/", Update)
 	r.PATCH("/", Patch)
 	r.DELETE("/", Delete)
+	r.GET("/file", File)
 }
 
 // Find logic
@@ -34,13 +38,15 @@ func Find(c *gin.Context) {
 		page.Order = helper.Order
 	}
 	var music Music
-	if err := c.BindQuery(&music); err != nil {
+	fmt.Printf("music is %+v", music)
+	if err := c.ShouldBindQuery(&music); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			helper.Code:  http.StatusBadRequest,
 			helper.Error: err.Error(),
 		})
 		return
 	}
+	fmt.Printf(" bind after music is %+v", music)
 	// log.Printf("page is %+v, music is %+v", page, music)
 	result, err := FindCondition(&music, page)
 	if err != nil {
@@ -146,4 +152,14 @@ func Delete(c *gin.Context) {
 		helper.Code: http.StatusOK,
 		helper.Data: music,
 	})
+}
+
+// File logic
+func File(c *gin.Context) {
+	name := c.DefaultQuery("name", "")
+	file, err := ioutil.ReadFile(name)
+	if err != nil {
+		log.Println(err)
+	}
+	c.Writer.Write(file)
 }
