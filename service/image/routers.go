@@ -43,7 +43,7 @@ func Find(c *gin.Context) {
 	}
 	image.DeletedAt = nil
 	// log.Printf("page is %+v, image is %+v", page, image)
-	result, err := FindCondition(&image, page)
+	result, err := FindCondition(image, page)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			helper.Code:  http.StatusNotFound,

@@ -46,7 +46,7 @@ func Find(c *gin.Context) {
 	}
 	music.DeletedAt = nil
 	// log.Printf("page is %+v, music is %+v", page, music)
-	result, err := FindCondition(&music, page)
+	result, err := FindCondition(music, page)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			helper.Code:  http.StatusNotFound,
