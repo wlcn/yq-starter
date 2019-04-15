@@ -12,10 +12,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/wlcn/yq-starter/config"
 	"github.com/wlcn/yq-starter/helper"
+	"github.com/wlcn/yq-starter/service/answer"
 	"github.com/wlcn/yq-starter/service/article"
 	"github.com/wlcn/yq-starter/service/auth"
 	"github.com/wlcn/yq-starter/service/image"
 	"github.com/wlcn/yq-starter/service/music"
+	"github.com/wlcn/yq-starter/service/question"
 	"github.com/wlcn/yq-starter/service/user"
 )
 
@@ -38,6 +40,8 @@ func routerEngine() *gin.Engine {
 	article.Routers(v1.Group("/article"))
 	image.Routers(v1.Group("/image"))
 	music.Routers(v1.Group("/music"))
+	question.Routers(v1.Group("/question"))
+	answer.Routers(v1.Group("/answer"))
 	return r
 }
 
@@ -152,4 +156,6 @@ func Migrate() {
 	helper.DB.AutoMigrate(&article.Article{})
 	helper.DB.AutoMigrate(&image.Image{})
 	helper.DB.AutoMigrate(&music.Music{})
+	helper.DB.AutoMigrate(&question.Question{})
+	helper.DB.AutoMigrate(&answer.Answer{})
 }
