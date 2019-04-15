@@ -39,7 +39,7 @@ func FindCondition(condition interface{}, page common.Page) (interface{}, error)
 	var result = make(map[string]interface{}, 0)
 	var models []Music
 	var count int
-	err := helper.DB.Where(condition).Find(&models).Count(&count).Error
+	err := helper.DB.Model(&Music{}).Where(condition).Count(&count).Error
 	if err != nil {
 		return result, err
 	}

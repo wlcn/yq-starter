@@ -59,7 +59,11 @@ func FindCondition(condition interface{}, page common.Page) (interface{}, error)
 	var result = make(map[string]interface{}, 0)
 	var models []User
 	var count int
-	err := helper.DB.Where(condition).Limit(page.Size).Offset((page.Page - 1) * page.Size).Order(page.Order).Find(&models).Count(&count).Error
+	err := helper.DB.Model(&User{}).Where(condition).Count(&count).Error
+	if err != nil {
+		return result, err
+	}
+	err = helper.DB.Where(condition).Limit(page.Size).Offset((page.Page - 1) * page.Size).Order(page.Order).Find(&models).Error
 	if err != nil {
 		log.Printf("Database query error is %+v", err)
 		return result, err
